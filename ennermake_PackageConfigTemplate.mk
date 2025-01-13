@@ -4,7 +4,7 @@
 
 # -------------------------------------------------------------------------------------------------
 
-# This file sets:
+# This file should set for every package/submodule xxx:
 # - the base directories  (xxx_BASEDIR) 
 # - the build directories (xxx_BUILD_DIR)
 # - library directories   (xxx_LIB_DIR)
@@ -17,6 +17,16 @@
 #   :=       --> make the variable immediate (see documentation of make)
 #   abspath  --> transforms into absolute path names (see also realpath)
 #   wildcard --> ensures that "~" for the user home is correctly translated 
+
+# -------------------------------------------------------------------------------------------------
+
+
+
+#
+#
+# The following is an example used for project PDO (ParDynOpt)
+#
+#
 
 
 

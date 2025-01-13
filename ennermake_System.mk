@@ -61,11 +61,13 @@ endif
 # ---------------------------------------------------------------------------------------
 # ENNERMAKE FILES
 
+# Package configuration file in project directory
+ENNERMAKE_PACKAGECONFIG        := $(ENNERMAKE_PROJECT_BASEDIR)/ennermake.packageconfig
+
 # Setup the ennermake file access variables
 ENNERMAKE_DEBUG_HELPERS        := $(ENNERMAKE_DIR)/ennermake_Debug.mk
 ENNERMAKE_SETUP_OS_DETECTION   := $(ENNERMAKE_DIR)/ennermake_OSdetection.mk
 ENNERMAKE_SETUP_OS_SPECIFICS   := $(ENNERMAKE_DIR)/ennermake_OSspecifics.mk
-ENNERMAKE_SETUP_PACKAGE        := $(ENNERMAKE_DIR)/ennermake_PackageConfig.mk
 ENNERMAKE_SETUP_CHECKS         := $(ENNERMAKE_DIR)/ennermake_Checks.mk
 
 # Include files for usage in MakeRules.mk
