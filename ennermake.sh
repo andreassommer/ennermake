@@ -54,7 +54,7 @@ FORCED=0
 CONFIGFILE="ennermake.packageconfig"
 
 # if two args are specified, check if second argument is --forced
-if [ ARG_FORCE == "--force" ]; then
+if [ "$ARG_FORCE" == "--force" ]; then
    FORCED=1
 fi
 
@@ -72,6 +72,42 @@ DESTINATION=$( cd -- "$( dirname -- "${DESTINATION}" )" &> /dev/null && pwd )
 echo "Using ennermake directory in '$ENNERMAKEDIR'"
 
 
+
+
+# HELPER SCRIPT:  Abort if file exists and not overwriting is not forced
+abort_if_not_forced() {
+   local QUERYFILE=$1
+   local QUERYDIR=$2
+   local FORCEFLAG=$3
+   if [ -f "$QUERYDIR/$QUERYFILE" ]; then
+      if [ "$FORCEFLAG" -eq 0 ]; then
+         echo "File $QUERYFILE already present in $QUERYDIR. Use --force to overwrite."
+         exit 9
+      fi
+   fi
+}
+
+
+# HELPER SCRIPT:  Initialize in project base dir
+init_project_dir() {
+   # check if file exists
+   abort_if_not_forced "$CONFIGFILE" "$DESTINATION" $FORCED
+   # copy configuration template and top level makefiles
+   cp -v --backup "$ENNERMAKEDIR/ennermake_PackageConfigTemplate.mk" $DESTINATION/$CONFIGFILE
+   cp -v --backup "$ENNERMAKEDIR/basedirmakefiles/Makefile"     $DESTINATION
+   cp -v --backup "$ENNERMAKEDIR/basedirmakefiles/MakeRules.mk" $DESTINATION
+}
+
+
+# HELPER SCRIPT:  Initialize in project subdirectory
+init_sub_dir() {
+   cp -v --backup "$ENNERMAKEDIR/subdirmakefiles/Makefile"     $DESTINATION
+   cp -v --backup "$ENNERMAKEDIR/subdirmakefiles/MakeRules.mk" $DESTINATION
+}
+
+
+
+# PROCESS COMMAND
 case $COMMAND in
 
    init | INIT)
@@ -93,22 +129,7 @@ case $COMMAND in
 esac
 
 
-# finito
+# FINITO
 echo "Done."
 exit 0
 
-
-# HELPER SCRIPT:  Initialize in project base dir
-init_project_dir() {
-   # copy configuration template and top level makefiles
-   cp -v --backup --suffix=.bak "$ENNERMAKEDIR/ennermake_PackageConfigTemplate.mk" $DESTINATION/$CONFIGFILE
-   cp -v "$ENNERMAKEDIR/basedirmakefiles/Makefile"     $DESTINATION
-   cp -v "$ENNERMAKEDIR/basedirmakefiles/MakeRules.mk" $DESTINATION
-}
-
-
-# HELPER SCRIPT:  Initialize in project subdirectory
-init_sub_dir() {
-   cp -v --backup --suffix=.bak "$ENNERMAKEDIR/subdirmakefiles/Makefile"     $DESTINATION
-   cp -v --backup --suffix=.bak "$ENNERMAKEDIR/subdirmakefiles/MakeRules.mk" $DESTINATION
-}
