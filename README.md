@@ -1,19 +1,26 @@
-ENNERMAKE Build System
+# ENNERMAKE Build System
 
-Directories
+## Directories
 
-./       Main directory with all ennermake_XXX.mk makefiles
-./basedirmakefile  template directory with ennermake files to be put in project base dir
-./subdirmakefiles  template directory with ennermake files to be put in project subdirectories
+./            main directory with all ennermake_XXX.mk makefiles
+./templates   template directory with ennermake files to be put in project base directory or subfolders
+./examples    some examples from an existing project (pdo)
 
 
-Initialization
+## Initialization
 
-From the project base directory, invoke
+From inside the _project base directory_, invoke
 ```
-./ennermake/ennermake_init.sh .
+./ennermake/ennermake.sh init .
 ```
-This will generate required config files.
+This will generate required files.
+For a re-init, invoke with `--force` flag to overwrite (delete!) existing configuration.
+
+To initialize a _subdirectory_, change to that subdirectory and invoke
+```
+./ennermake/ennermake.sh initsub .
+```
+This will generate required files.
 For a re-init, invoke with `--force` flag to overwrite (delete!) existing configuration.
 
 
