@@ -12,7 +12,7 @@ BASEDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 ENNERMAKE_PROJECT_BASEDIR := $(BASEDIR)
 include $(BASEDIR)/mk/ennermake_system.mk
 
-# load PDO package configuration
+# load project package configuration
 include $(ENNERMAKE_PACKAGECONFIG)
 
 
