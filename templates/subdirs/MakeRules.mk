@@ -15,6 +15,8 @@ include $(ENNERMAKE_INC_MODULE_HEAD)
 # MODULE config
 # =============
 
+# SUBDIRS_$(d) := arg_list discretization function function_interface mapper model 
+# include $(ENNERMAKE_INC_PROCESS_SUBDIRS)
 
 SOURCES_$(d) := $(wildcard $(d)/*.cxx)
 INCLUDE_DIRS_$(d) := $(PROJECT_INC_DIRS)

@@ -62,7 +62,7 @@ endif
 # ENNERMAKE FILES
 
 # Package configuration file in project directory
-ENNERMAKE_PACKAGECONFIG        := $(ENNERMAKE_PROJECT_BASEDIR)/ennermake.packageconfig
+ENNERMAKE_PACKAGECONFIG        := $(ENNERMAKE_PROJECT_BASEDIR)/ennermake_packageconfig.mk
 
 # Setup the ennermake file access variables
 ENNERMAKE_DEBUG_HELPERS        := $(ENNERMAKE_DIR)/ennermake_Debug.mk

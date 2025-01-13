@@ -8,19 +8,47 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
 fi
 
 
+
+# ARGUMENT PROCESSING and VARIABLES
+# =================================
+
+# named arguments
+ARG_COMMAND=$1
+ARG_DESTINATION=$2
+ARG_FORCE=$3
+FORCEFLAG="--force"
+
+# init vars
+COMMAND=$ARG_COMMAND
+DESTINATION=$ARG_DESTINATION
+
+# check if force flag is specified
+FORCED=0
+if [ "$ARG_FORCE" == "$FORCEFLAG" ]; then
+   FORCED=1
+fi
+
+# directories and files
+ENNERMAKEDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+TEMPLATEDIR="$ENNERMAKEDIR/templates"
+CONFIGFILE="ennermake_packageconfig.mk"
+
+
+
+
 # HELPER FUNCTIONS
 # ================
 
 # display help
 usage() {
    echo
-   echo "Usage: $0 init DESTINATION [--force]"
+   echo "Usage: $0 init DESTINATION [$FORCEFLAG]"
    echo "   Initializes ennermake using DESTINATION as project base directory."
-   echo "   If a config file already exists there, invoke with --force to overwrite existing files."
+   echo "   If a config file already exists there, invoke with $FORCEFLAG to overwrite existing files."
    echo
-   echo "Usage: $0 initsub SUBDIR [--force]"
+   echo "Usage: $0 initsub SUBDIR [$FORCEFLAG]"
    echo "   Initializes ennermake in SUBDIR as a project subdirectory."
-   echo "   If a Makefile already exists there, invoke with --force to overwrite existing files."
+   echo "   If a Makefile already exists there, invoke with $FORCEFLAG to overwrite existing files."
    exit 9
 }
 
@@ -40,23 +68,6 @@ if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
    exit 9
 fi
 
-
-# named arguments
-ARG_COMMAND=$1
-ARG_DESTINATION=$2
-ARG_FORCE=$3
-
-# init vars
-ENNERMAKEDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-COMMAND=$ARG_COMMAND
-DESTINATION=$ARG_DESTINATION
-FORCED=0
-CONFIGFILE="ennermake.packageconfig"
-
-# if two args are specified, check if second argument is --forced
-if [ "$ARG_FORCE" == "--force" ]; then
-   FORCED=1
-fi
 
 # ensure DESTINATION exists
 if [ ! -d "$DESTINATION" ]; then
@@ -78,10 +89,10 @@ echo "Using ennermake directory in '$ENNERMAKEDIR'"
 abort_if_not_forced() {
    local QUERYFILE=$1
    local QUERYDIR=$2
-   local FORCEFLAG=$3
+   local FORCED=$3
    if [ -f "$QUERYDIR/$QUERYFILE" ]; then
-      if [ "$FORCEFLAG" -eq 0 ]; then
-         echo "File $QUERYFILE already present in $QUERYDIR. Use --force to overwrite."
+      if [ "$FORCED" -eq 0 ]; then
+         echo "File $QUERYFILE already present in $QUERYDIR. Use $FORCEFLAG to overwrite."
          exit 9
       fi
    fi
@@ -93,16 +104,16 @@ init_project_dir() {
    # check if file exists
    abort_if_not_forced "$CONFIGFILE" "$DESTINATION" $FORCED
    # copy configuration template and top level makefiles
-   cp -v --backup "$ENNERMAKEDIR/ennermake_PackageConfigTemplate.mk" $DESTINATION/$CONFIGFILE
-   cp -v --backup "$ENNERMAKEDIR/basedirmakefiles/Makefile"     $DESTINATION
-   cp -v --backup "$ENNERMAKEDIR/basedirmakefiles/MakeRules.mk" $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/ennermake_packageconfig.mk" $DESTINATION/$CONFIGFILE
+   cp -v --backup "$TEMPLATEDIR/basedir/Makefile"     $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/basedir/MakeRules.mk" $DESTINATION
 }
 
 
 # HELPER SCRIPT:  Initialize in project subdirectory
 init_sub_dir() {
-   cp -v --backup "$ENNERMAKEDIR/subdirmakefiles/Makefile"     $DESTINATION
-   cp -v --backup "$ENNERMAKEDIR/subdirmakefiles/MakeRules.mk" $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/subdir/Makefile"     $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/subdir/MakeRules.mk" $DESTINATION
 }
 
 
