@@ -112,8 +112,8 @@ init_project_dir() {
 
 # HELPER SCRIPT:  Initialize in project subdirectory
 init_sub_dir() {
-   cp -v --backup "$TEMPLATEDIR/subdir/Makefile"     $DESTINATION
-   cp -v --backup "$TEMPLATEDIR/subdir/MakeRules.mk" $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/subdirs/Makefile"     $DESTINATION
+   cp -v --backup "$TEMPLATEDIR/subdirs/MakeRules.mk" $DESTINATION
 }
 
 
@@ -122,13 +122,13 @@ init_sub_dir() {
 case $COMMAND in
 
    init | INIT)
-      echo "Initializing ennermake in project base directory $DESTINATION"
+      echo "Initializing ennermake in PROJECT BASE DIRECTORY $DESTINATION"
       init_project_dir
       echo "Initialized ennermake in project dir $DESTINATION"
       ;;
 
    initsub | INITSUB)
-      echo "Initializing ennermake in subdirectory $DESTINATION"
+      echo "Initializing ennermake in SUB-DIRECTORY $DESTINATION"
       init_sub_dir
       ;;
 
