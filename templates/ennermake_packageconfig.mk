@@ -1,4 +1,4 @@
--include $(MAKE_INC_FILE_ENTRY)
+-include $(ENNERMAKE_INC_FILE_ENTRY)
 
 # Package definitions
 
@@ -41,7 +41,7 @@ PROJECT_EXTLIBS_NAMES ?=
 PROJECT_EXTLIBS_DIRS  ?=
 
 # Name of PROJECT library
-# PROJECT_LIB_NAME := projectlib
+PROJECT_LIB_NAME := projectlib
 
 
 # -------------------------------------------------------------------------------------------------

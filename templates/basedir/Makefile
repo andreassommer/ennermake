@@ -10,10 +10,10 @@ BASEDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
 # load ENNERMAKE system
 ENNERMAKE_PROJECT_BASEDIR := $(BASEDIR)
-include $(BASEDIR)/mk/ennermake_system.mk
+include $(BASEDIR)/ennermake/ennermake_System.mk
 
 # load project package configuration
-include $(ENNERMAKE_PACKAGECONFIG)
+include $(ENNERMAKE_SETUP_PACKAGECONFIG)
 
 
 

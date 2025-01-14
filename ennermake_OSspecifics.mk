@@ -32,6 +32,7 @@ ifeq ($(UNAME),Linux)
    export CD    := cd
    export CP    := cp
    export MV    := mv
+   export LS    := ls
    export MKDIR := mkdir -p
    export DEBUG := $(ECHO) DEBUG: 
 
@@ -68,6 +69,7 @@ ifeq ($(UNAME),Darwin)
    export CD    := cd
    export CP    := cp
    export MV    := mv
+   export LS    := ls
    export MKDIR := mkdir -p
    export DEBUG := echo DEBUG: 
 
@@ -105,6 +107,7 @@ ifeq ($(UNAME),Windows)
    export CD    := cd
    export CP    := copy
    export MV    := move
+   export LS    := dir
    export MKDIR := mkdir
    export DEBUG := echo DEBUG: 
 

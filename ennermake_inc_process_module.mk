@@ -17,7 +17,6 @@ CLEAN_$(d)         := $(OBJECTS_$(d)) $(OBJECTS_PIC_$(d)) $(DEPFILES_$(d))
 INCLUDE_FLAGS_$(d) := $(call ennermake_generate_flags_include_dirs,$(INCLUDE_DIRS_$(d)))
 
 
-
 # ==================================
 # Local rules, targets, dependencies
 # ==================================

@@ -1,4 +1,4 @@
--include $(MAKE_INC_FILE_ENTRY)
+-include $(ENNERMAKE_INC_FILE_ENTRY)
 
 # Package definitions
 

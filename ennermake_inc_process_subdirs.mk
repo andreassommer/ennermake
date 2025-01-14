@@ -1,6 +1,5 @@
 # This files walks into the submodules specified in the variable SUBDIRS_$(d)
 
-
 # use full paths
 SUBDIRS_$(d) := $(call ennermake_unwild_absolutize_filespec, $(SUBDIRS_$(d)))
 
@@ -15,10 +14,8 @@ $(foreach m,$(SUBDIRS_$(d)), \
    $(eval OBJECTS_PIC_$(d) += $(OBJECTS_PIC_$(dir))) \
    )
 
-
 # For debugging, insert the following after the foreach line
 #    $(info Including submodule $m) \
-
 
 # Compilation target: Depends on phony compilation targets of submodules
 .PHONY: compile_$(MODULE_$(d))

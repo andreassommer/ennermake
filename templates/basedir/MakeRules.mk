@@ -18,7 +18,7 @@ MODULE_$(d)  := base
 
 
 # include submodules, random order
-SUBDIRS_$(d) := src  tests  examples
+SUBDIRS_$(d) := src  tests
 include $(ENNERMAKE_INC_PROCESS_SUBDIRS)
 
 
@@ -33,13 +33,13 @@ include $(ENNERMAKE_INC_PROCESS_SUBDIRS)
 	$(ECHO) Prerequisites are $^ 
 	$(DEBUG) NOT YET $(COMP.cc)
 
-%$(EXT.obj):  %.cxx
+%$(EXT.obj):  %.cpp
 	$(ECHO) Compiling $@
 	$(ECHO) Prerequisites are $^ 
 	$(COMP.cxx)
 
 %$(EXT.objPIC): CXXFLAGS.all+=$(FLAGS.pic)
-%$(EXT.objPIC): %.cxx
+%$(EXT.objPIC): %.cpp
 	$(ECHO) PIC-Compiling $@ 
 	$(ECHO) Prerequisites are $^ 
 	$(COMP.cxx)
@@ -69,7 +69,7 @@ clean:
 .PHONY:		dryclean
 dryclean:
 		$(ECHO) Cleaning would remove following...
-		@ls -1 $(CLEAN) 2>/dev/null || true
+		@$(LS) -1 $(CLEAN) 2>/dev/null || true
 
 
 
