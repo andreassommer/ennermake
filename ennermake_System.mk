@@ -158,13 +158,13 @@ ennermake_unwild_absolutize_filespec = \
 # ---------------------------------------------------------------------------------------
 # INTENTions for UNIT generation
 
-INTENT.archive    = archive # DEBUG: todo
-INTENT.compile    = compile # DEBUG: todo
+INTENT.archive    = archive
+INTENT.compile    = compile
 INTENT.executable = executable
 INTENT.libdynamic = libdynamic
 INTENT.libstatic  = libstatic
-INTENT.object     = object # DEBUG: todo
-INTENT.picobject  = picobject # DEBUG: todo
+INTENT.object     = object
+INTENT.picobject  = picobject
 INTENTS = $(INTENT.archive) $(INTENT.compile) $(INTENT.executable)\
           $(INTENT.libdynamic) $(INTENT.libstatic)\
           $(INTENT.object) $(INTENT.picobject) 

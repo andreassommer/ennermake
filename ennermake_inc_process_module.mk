@@ -1,6 +1,7 @@
+$(call ennermake_debug, Processing MODULE: "$(MODULE_$(d))")
+
 # Check if module name is available
 $(call ennermake_check_module_name_available)
-
 
 # =============== 
 # Local variables
@@ -26,6 +27,8 @@ $(OBJECTS_PIC_$(d)):  CXXFLAGS.local := $(CXXFLAGS_$(d)) $(INCLUDE_FLAGS_$(d))
 
 MODULE.COMPILETARGET := compile_$(MODULE_$(d))
 .PHONY:	$(MODULE.COMPILETARGET)
-compile_$(MODULE_$(d)):	$(OBJECTS_$(d)) $(OBJECTS_PIC_$(d))
+$(MODULE.COMPILETARGET):	$(OBJECTS_$(d)) $(OBJECTS_PIC_$(d))
 	$(ECHO) $@ ready.
 
+
+$(call ennermake_debug, Created recipe for target $(MODULE.COMPILETARGET))

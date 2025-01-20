@@ -1,5 +1,9 @@
+$(call ennermake_debug, Processing UNIT: "$(UNIT.NAME)" with INTENT "$(UNIT.INTENT)" )
+
 # Error check: valid INTENT?
+UNIT.INTENT := $(strip $(UNIT.INTENT))
 $(call ennermake_check_intent, $(UNIT.INTENT))
+
 
 # Always include defaults
 UNIT.INCLUDE_DIRS  += $(UNIT.default.INCLUDE_DIRS)  #DEBUG: make these variables immediate!
@@ -35,7 +39,7 @@ ifeq ($(strip $(UNIT.TARGET)),)
    else
       $(error Don't know how to build target name for intent $(UNIT.INTENT) from source files $(UNIT.SOURCES))
    endif
-   $(call ennermake_debug, No target given, using $(UNIT.TARGET))
+   $(call ennermake_debug, No target given - using $(UNIT.TARGET))
 endif
 
 
@@ -93,6 +97,8 @@ $(UNIT.COMPILETARGET):	$(UNIT.OBJECTS) $(UNIT.OBJECTS_PIC)
 	$(ECHO) Prerequisites: $^
 	$(ECHO) $@ compiled.
 
+$(call ennermake_debug, Target created in UNIT.OBJECTS    : "$(UNIT.OBJECTS)")
+$(call ennermake_debug, Target created in UNIT_OBJECTC_PIC: "$(UNIT.OBJECTS_PIC)")
 
 # INTENT: all --- Target-specific variables
 ifneq ($(UNIT.TARGET),)
@@ -102,17 +108,20 @@ $(UNIT.TARGET): LINKFLAGS.local := $(call ennermake_generate_flags_library_dirs,
 endif
 
 # Set variables to be used inside UNIT.TARGET recipes
-$(call ennermake_debug, making target for $(UNIT.INTENT) in unit $(UNIT.NAME))
+$(call ennermake_debug, making target for intent "$(UNIT.INTENT)" in unit "$(UNIT.NAME)")
 $(UNIT.TARGET):   unitname := $(UNIT.NAME)
 $(UNIT.TARGET):   unitintent := $(UNIT.INTENT)
 
+# Helper for debugging
+PROCESSED_INTENTS :=
 
 # INTENT: executable
 ifeq ($(UNIT.INTENT),$(INTENT.executable))
-   $(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
+$(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
 	$(ECHO) Linking executable $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.executable)
 	$(ECHO) $(unitname) ready.
+PROCESSED_INTENTS += executable
 endif
 
 # INTENT: libdynamic
@@ -121,6 +130,7 @@ ifeq ($(UNIT.INTENT),$(INTENT.libdynamic))
 	$(ECHO) Linking dynamic library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.dynamic)
 	$(ECHO) $(unitname) ready.
+PROCESSED_INTENTS += libdynamic
 endif
 
 # INTENT: libstatic    # DEBUG: todo / check
@@ -129,6 +139,7 @@ ifeq ($(UNIT.INTENT),$(INTENT.libstatic))
 	$(ECHO) Linking static library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.static)
 	$(ECHO) $(unitname) ready.
+PROCESSED_INTENTS += libstatic
 endif
 
 # INTENT: Archive  # DEBUG: todo / check
@@ -137,8 +148,13 @@ ifeq ($(UNIT.INTENT),$(INTENT.archive))
 	$(ECHO) Archiving in library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.archive)
 	$(ECHO) $(unitname) ready.
+PROCESSED_INTENTS += archive
 endif
 
+# Check if INTENT has been processed
+ifeq ($(strip $(PROCESSED_INTENTS)),)
+   $(error No intent was processed. Last intent was: $(UNIT.INTENT))
+endif
 
 
 
