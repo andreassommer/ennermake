@@ -117,7 +117,7 @@ PROCESSED_INTENTS :=
 
 # INTENT: executable
 ifeq ($(UNIT.INTENT),$(INTENT.executable))
-$(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
+$(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) $(UNIT.REQUIRES)
 	$(ECHO) Linking executable $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.executable)
 	$(ECHO) $(unitname) ready.
