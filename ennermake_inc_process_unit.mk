@@ -98,7 +98,7 @@ $(UNIT.COMPILETARGET):	$(UNIT.OBJECTS) $(UNIT.OBJECTS_PIC)
 	$(ECHO) $@ compiled.
 
 $(call ennermake_debug, Target created in UNIT.OBJECTS    : "$(UNIT.OBJECTS)")
-$(call ennermake_debug, Target created in UNIT_OBJECTC_PIC: "$(UNIT.OBJECTS_PIC)")
+$(call ennermake_debug, Target created in UNIT_OBJECTS_PIC: "$(UNIT.OBJECTS_PIC)")
 
 # INTENT: all --- Target-specific variables
 ifneq ($(UNIT.TARGET),)
