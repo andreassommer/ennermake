@@ -16,13 +16,13 @@ else
 endif
 
 
-# =====
-# LINUX 
-# =====
 
+# =====
+# LINUX
+# =====
 ifeq ($(UNAME),Linux)
    $(info __ Setting Linux commands)
-   export CPP   := g++
+   export CXX   := g++
    export CC    := gcc
    export F77   := gfortran
    export AR    := ar
@@ -48,18 +48,51 @@ ifeq ($(UNAME),Linux)
    # File prefixes
    PREFIX.libstatic  := lib
    PREFIX.libdynamic := lib
+#endif at end of file !
 
-endif
+
+
+# =====
+# LINUX
+# =====
+else ifeq ($(UNAME),Cygwin)
+   $(info __ Setting Cygwin commands)
+   export CXX   := x86_64-w64-mingw32-g++.exe
+   export CC    := x86_64-w64-mingw32-gcc.exe
+   export F77   := x86_64-w64-mingw32-gfortran.exe
+   export AR    := x86_64-w64-mingw32-ar.exe
+   export RM    := rm -fv 
+   export FIND  := find
+   export ECHO  := @echo __
+   export CD    := cd
+   export CP    := cp
+   export MV    := mv
+   export LS    := ls
+   export MKDIR := mkdir -p
+   export DEBUG := $(ECHO) DEBUG: 
+
+   # File extensions
+   EXT.obj        := .o
+   EXT.objPIC     := .pic
+   EXT.exe        := .exe
+   EXT.libstatic  := .a
+   EXT.libdynamic := .dll
+   EXT.depend     := .d
+   EXT.archive    := .a
+
+   # File prefixes
+   PREFIX.libstatic  := lib
+   PREFIX.libdynamic := lib
+#endif at end of file !
 
 
 
 # ======
 # Darwin (=MACOS)
 # ======
-
-ifeq ($(UNAME),Darwin)
+else ifeq ($(UNAME),Darwin)
    $(info __ Setting Darwin commands)
-   export CPP   := g++
+   export CXX   := g++
    export CC    := gcc
    export F77   := gfortran
    export AR    := ar
@@ -85,19 +118,17 @@ ifeq ($(UNAME),Darwin)
    # File prefixes
    PREFIX.libstatic  := lib
    PREFIX.libdynamic := lib
-
 $(error Darwin commands not yet tested)
-endif
+#endif at end of file !
 
 
 
 # =======
 # Windows
 # =======
-
-ifeq ($(UNAME),Windows)
+else ifeq ($(UNAME),Windows)
    $(info __ Setting Windows commands)
-   export CPP   := g++
+   export CXX   := g++
    export CC    := gcc
    export F77   := gfortran
    export AR    := ar
@@ -125,7 +156,12 @@ ifeq ($(UNAME),Windows)
    PREFIX.libdynamic :=
 
 $(error Windows commands not yet tested)
-endif
+#endif at end of file !
 
+
+else
+$(error Unknown platform $(UNAME) -- Abort!)
+
+endif
 
 
