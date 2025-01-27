@@ -39,7 +39,7 @@ ifeq ($(UNAME),Linux)
    # File extensions
    EXT.obj        := .o
    EXT.objPIC     := .pic
-   EXT.exe        :=
+   EXT.executable :=
    EXT.libstatic  := .a
    EXT.libdynamic := .so
    EXT.depend     := .d
@@ -74,7 +74,7 @@ else ifeq ($(UNAME),Cygwin)
    # File extensions
    EXT.obj        := .o
    EXT.objPIC     := .pic
-   EXT.exe        := .exe
+   EXT.executable := .exe
    EXT.libstatic  := .a
    EXT.libdynamic := .dll
    EXT.depend     := .d
@@ -109,7 +109,7 @@ else ifeq ($(UNAME),Darwin)
    # File extensions
    EXT.obj        := .o
    EXT.objPIC     := .pic
-   EXT.exe        :=
+   EXT.executable :=
    EXT.libstatic  := .a
    EXT.libdynamic := .dylib
    EXT.depend     := .d
@@ -145,7 +145,7 @@ else ifeq ($(UNAME),Windows)
    # File extensions
    EXT.obj        := .o
    EXT.objPIC     := .pic
-   EXT.exe        := .exe
+   EXT.executable := .exe
    EXT.libstatic  := .lib
    EXT.libdynamic := .dll
    EXT.depend     := .d
