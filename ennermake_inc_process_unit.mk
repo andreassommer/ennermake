@@ -34,8 +34,7 @@ ifeq ($(strip $(UNIT.TARGET)),)
    else ifeq ($(UNIT.INTENT),$(INTENT.archive))
       UNIT.TARGET := $(tmp)$(EXT.archive)
    else ifeq ($(UNIT.INTENT),$(INTENT.compile))
-      UNIT.TARGET := 
-      $(error Compile intent NOT NET IMPLEMENTED) # DEBUG: Todo?
+      UNIT.TARGET := $(UNIT.COMPILETARGET)
    else
       $(error Don't know how to build target name for intent $(UNIT.INTENT) from source files $(UNIT.SOURCES))
    endif
@@ -115,6 +114,13 @@ $(UNIT.TARGET):   unitintent := $(UNIT.INTENT)
 # Helper for debugging
 PROCESSED_INTENTS :=
 
+# INTENT: Compile   (explicit)
+# If explicitly requested, add it to the processed intents lists to pass the check below
+ifeq ($(UNIT.INTENT),$(INTENT.compile))
+PROCESSED_INTENTS += compile
+endif
+
+
 # INTENT: executable
 ifeq ($(UNIT.INTENT),$(INTENT.executable))
 $(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) $(UNIT.REQUIRES)
@@ -150,6 +156,7 @@ ifeq ($(UNIT.INTENT),$(INTENT.archive))
 	$(ECHO) $(unitname) ready.
 PROCESSED_INTENTS += archive
 endif
+
 
 # Check if INTENT has been processed
 ifeq ($(strip $(PROCESSED_INTENTS)),)
