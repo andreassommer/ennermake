@@ -17,11 +17,11 @@ endif
 
 
 
-# ==============
-# LINUX or MinGW
-# ==============
-ifneq (,$(filter LINUX MINGW, $(UNAME)))
-   $(info __ Setting Linux/MinGW commands)
+# =====
+# LINUX
+# =====
+ifeq ($(UNAME),LINUX)
+   $(info __ Setting Linux commands)
    export CXX   := g++
    export CC    := gcc
    export F77   := gfortran
@@ -42,6 +42,42 @@ ifneq (,$(filter LINUX MINGW, $(UNAME)))
    EXT.executable :=
    EXT.libstatic  := .a
    EXT.libdynamic := .so
+   EXT.depend     := .d
+   EXT.archive    := .a
+
+   # File prefixes
+   PREFIX.libstatic  := lib
+   PREFIX.libdynamic := lib
+#endif at end of file !
+
+
+
+
+# =====
+# MinGW
+# =====
+else ifeq ($(UNAME),MINGW)
+   $(info __ Setting Linux/MinGW commands)
+   export CXX   := g++
+   export CC    := gcc
+   export F77   := gfortran
+   export AR    := ar
+   export RM    := rm -fv 
+   export FIND  := find
+   export ECHO  := @echo __
+   export CD    := cd
+   export CP    := cp
+   export MV    := mv
+   export LS    := ls
+   export MKDIR := mkdir -p
+   export DEBUG := $(ECHO) DEBUG: 
+
+   # File extensions
+   EXT.obj        := .o
+   EXT.objPIC     := .pic
+   EXT.executable :=
+   EXT.libstatic  := .a
+   EXT.libdynamic := .dll
    EXT.depend     := .d
    EXT.archive    := .a
 
