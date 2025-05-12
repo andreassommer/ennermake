@@ -15,7 +15,7 @@ include $(ENNERMAKE_INC_MODULE_HEAD)
 # MODULE config
 # =============
 
-SOURCES_$(d) := $(wildcard $(d)/*.cxx)
+SOURCES_$(d) := $(wildcard $(ennermake_curdir)/*.cpp)
 INCLUDE_DIRS_$(d) := $(PROJECT_INC_DIRS)
 
 include $(ENNERMAKE_INC_PROCESS_MODULE)

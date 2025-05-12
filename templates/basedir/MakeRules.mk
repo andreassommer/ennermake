@@ -3,14 +3,15 @@
 # TOP-LEVEL makerules.mk
 
 # Save directory list (call stack, so to say)
-sp              := 
-dirstack_$(sp)  := 
-d               := $(BASEDIR)
+ennermake_sp                       := 
+ennermake_dirstack_$(ennermake_sp) := 
+ennermake_curdir                   := $(BASEDIR)
+d                                  := $(call ennermake_generate_safe_name,$(BASEDIR))
 
-# sp             : stack pointer
-# dirstack_$(sp) : directory stack
-# d              : current directory
-# dir            : directory to descend next
+# sp               : stack pointer
+# dirstack_$(sp)   : directory stack
+# curdir           : current directory
+# d                : safe name of current directory
 
 
 # this is the base module
