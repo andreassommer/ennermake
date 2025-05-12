@@ -17,6 +17,7 @@ ENNERMAKE_DIR :=  $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 empty :=
 ENNERMAKE_SYMBOLS_EMPTY             := $(empty)
 ENNERMAKE_SYMBOLS_COMMA             := $(empty),$(empty)
+ENNERMAKE_SYMBOLS_COLON             := $(empty):$(empty)
 ENNERMAKE_SYMBOLS_SPACE             := $(empty) $(empty)
 ENNERMAKE_SYMBOLS_TILDE             := $(empty)~$(empty)
 ENNERMAKE_SYMBOLS_ASTERISK          := $(empty)*$(empty)
@@ -73,6 +74,7 @@ ENNERMAKE_SETUP_CHECKS         := $(ENNERMAKE_DIR)/ennermake_Checks.mk
 # Include files for usage in MakeRules.mk
 ENNERMAKE_INC_PROPAGATE              := $(ENNERMAKE_DIR)/ennermake_inc_propagate.mk
 ENNERMAKE_INC_FILE_ENTRY             := $(ENNERMAKE_DIR)/ennermake_inc_file_entry.mk
+ENNERMAKE_INC_FILE_EXIT              := $(ENNERMAKE_DIR)/ennermake_inc_file_exit.mk
 ENNERMAKE_INC_DIRECTORY_ACCESSORS    := $(ENNERMAKE_DIR)/ennermake_inc_directory_accessors.mk
 ENNERMAKE_INC_DIRECTORY_UPDATERS     := $(ENNERMAKE_DIR)/ennermake_inc_directory_updaters.mk
 ENNERMAKE_INC_MODULE_HEAD            := $(ENNERMAKE_DIR)/ennermake_inc_module_head.mk
@@ -101,16 +103,18 @@ include $(ENNERMAKE_SETUP_CHECKS)
 # and substituting and slash / and backslash \ into _. 
 # Example:    directory "$(BASEDIR)/src/utils"  -->  module name "_src_utils"
 ennermake_generate_name           = $(strip $(subst \,_,$(subst /,_,$(subst $(ENNERMAKE_PROJECT_BASEDIR),,$(1)))))
-ennermake_generate_module_name    = $(call ennermake_generate_name,module_$(d))
+ennermake_generate_module_name    = $(call ennermake_generate_name,module_$(ennermake_curdir))
 ennermake_generate_unit_name      = $(call ennermake_generate_name,unit_$(1))
 
+# safename generates a safe variable name by substituting :/\ with _ (needed for variables like OBJECTS_$(d))
+ennermake_generate_safe_name      = $(strip $(subst \,_,$(subst /,_,$(subst :,_,$(1)))))
 
 # Function to generate library name flags
 ennermake_generate_flags_library_names          = $(addprefix -l,$(1))
 ennermake_generate_flags_library_dirs           = $(addprefix -L,$(1))
 ennermake_generate_flags_library_names_and_dirs = $(addprefix -l,$(1)) $(addprefix -L,$(2))
-ennermake_generate_flags_include_dirs  = $(addprefix -I,$(1))
-ennermake_generate_flags_rpath         = $(addprefix -Wl$(ENNERMAKE_SYMBOLS_COMMA)-rpath=,$(1))
+ennermake_generate_flags_include_dirs           = $(addprefix -I,$(1))
+ennermake_generate_flags_rpath                  = $(addprefix -Wl$(ENNERMAKE_SYMBOLS_COMMA)-rpath=,$(1))
 
 
 
@@ -122,7 +126,7 @@ ennermake_pprint_x = $(foreach word,$(1),$(word)$(2))
 ennermake_pprint   = $(call ennermake_pprint_x,$(1),$(ENNERMAKE_SYMBOLS_COMMA))
 
 # Make list having only unique elements
-ennermake_remove_duplicates = $(if $1,$(firstword $1) $(call ennermake_remove_duplicates,$(filter-out $(firstword $1),$1)))
+ennermake_remove_duplicates = $(if $(1),$(firstword $(1)) $(call ennermake_remove_duplicates,$(filter-out $(firstword $(1)),$(1))))
 
 # DEBUG: Helper to determine the calling function --- This does not work as intended.
 # ennermake_get_secondbutlast_makefile = $(lastword $(filter-out $(realpath $(lastword $(MAKEFILE_LIST))),$(MAKEFILE_LIST)))
@@ -133,24 +137,28 @@ ennermake_remove_duplicates = $(if $1,$(firstword $1) $(call ennermake_remove_du
 # ---------------------------------------------------------------------------------------
 # Transform file specs:
 
-# absolztize: if directory of file starts with slash /, call abspath, otherwise add prefix $(d)
-ennermake_absolutize_filespec = \
-   $(foreach file,$1,$(strip \
-       $(if $(patsubst /%,,$(dir $(file))), \
-         $(abspath $(d)/$(file)), \
-         $(abspath $(file)))))
+# check if path is absolute:   either starts with / (LINUX) or contains ":\" (WINDOWS) or ":/" (MinGW)
+ennermake_is_absolute_filespec = $(strip \
+$(if $(findstring $(ENNERMAKE_SYMBOLS_COLON)$(ENNERMAKE_SYMBOLS_BACKSLASH),$(1)),ABSWINDOWS,\
+$(if $(findstring $(ENNERMAKE_SYMBOLS_COLON)$(ENNERMAKE_SYMBOLS_SLASH),$(1)),ABSMINGW,\
+$(if $(patsubst $(ENNERMAKE_SYMBOLS_SLASH)%,$(empty),$(dir $(1))),$(empty),ABSLINUX))))
+
+
+# absolutize: if absolute file is given, return unchanged, otherwise add prefix for current directory
+ennermake_absolutize_filespec = $(strip \
+$(foreach file,$(1),\
+$(if $(call ennermake_is_absolute_filespec,$(file)),$(file),$(abspath $(ennermake_curdir)/$(file)))))
+
 
 # unwild: apply wildcard function only to those filespecs containing the wildcard character
-ennermake_unwild_filespec = \
-   $(foreach file,$1,$(strip \
-      $(if $(findstring $(ENNERMAKE_SYMBOLS_ASTERISK),$(file)),\
-         $(wildcard $(file)),\
-         $(file))))
+ennermake_unwild_filespec = $(strip \
+$(foreach file,$(1),\
+$(if $(findstring $(ENNERMAKE_SYMBOLS_ASTERISK),$(file)),$(wildcard $(file)),$(file))))
+
 
 # first absolutize, then unwild
-ennermake_unwild_absolutize_filespec = \
-   $(call ennermake_unwild_filespec,\
-      $(call ennermake_absolutize_filespec,$(1)))
+ennermake_unwild_absolutize_filespec = $(strip \
+$(call ennermake_unwild_filespec,$(call ennermake_absolutize_filespec,$(1))))
 
 
 

@@ -1,13 +1,15 @@
 # Directory accessors
 
-sp              := $(sp).x
-dirstack_$(sp)  := $(d)
-d               := $(dir)
+ennermake_sp                       := $(ennermake_sp).x
+ennermake_dirstack_$(ennermake_sp) := $(ennermake_curdir)
+ennermake_curdir                   := $(ennermake_nextdir)
+d                                  := $(call ennermake_generate_safe_name, $(ennermake_nextdir))
 
-
-# sp             : stack pointer
-# dirstack_$(sp) : directory stack
-# d              : current directory
-# dir            : directory to descend next
+# d := $(d)
+# ennermake_sp            : stack pointer
+# ennermake_dirstack_$(sp): directory stack
+# ennermake_curdir        : current directory
+# d                       : safe name of current directoy
+# ennermake_nextdir       : directory to descend next
 
 

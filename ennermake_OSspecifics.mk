@@ -17,11 +17,11 @@ endif
 
 
 
-# =====
-# LINUX
-# =====
-ifeq ($(UNAME),Linux)
-   $(info __ Setting Linux commands)
+# ==============
+# LINUX or MinGW
+# ==============
+ifneq (,$(filter LINUX MINGW, $(UNAME)))
+   $(info __ Setting Linux/MinGW commands)
    export CXX   := g++
    export CC    := gcc
    export F77   := gfortran
@@ -52,10 +52,10 @@ ifeq ($(UNAME),Linux)
 
 
 
-# =====
-# LINUX
-# =====
-else ifeq ($(UNAME),Cygwin)
+# ======
+# Cygwin
+# ======
+else ifeq ($(UNAME),CYGWIN)
    $(info __ Setting Cygwin commands)
    export CXX   := x86_64-w64-mingw32-g++.exe
    export CC    := x86_64-w64-mingw32-gcc.exe
@@ -90,7 +90,7 @@ else ifeq ($(UNAME),Cygwin)
 # ======
 # Darwin (=MACOS)
 # ======
-else ifeq ($(UNAME),Darwin)
+else ifeq ($(UNAME),DARWIN)
    $(info __ Setting Darwin commands)
    export CXX   := g++
    export CC    := gcc
@@ -126,7 +126,7 @@ $(error Darwin commands not yet tested)
 # =======
 # Windows
 # =======
-else ifeq ($(UNAME),Windows)
+else ifeq ($(UNAME),WINDOWS)
    $(info __ Setting Windows commands)
    export CXX   := g++
    export CC    := gcc

@@ -2,18 +2,34 @@
 
 # Detect operating system 
 
-# Explanation:  Only windows uses semicolon ";" in path, the others have uname
-ifeq ($(findstring ;,$(PATH)), ;)
-    UNAME := Windows
-else
-    UNAME := $(shell uname 2>/dev/null || echo Unknown)
-    UNAME := $(patsubst CYGWIN%,Cygwin,$(UNAME))
-    UNAME := $(patsubst MSYS%,MSYS,$(UNAME))
-    UNAME := $(patsubst MINGW%,MSYS,$(UNAME))
-endif
-# UNAME is now one of Windows, Linux, Cygwin, MSYS, FreeBSD, NetBSD, Darwin, Solaris, OpenBSD, AIX, HP-UX.
-# If the uname command fails, it is set to Unknown.
+# OLD:  Only windows uses semicolon ";" in path, the others have uname
+#       That does not work anymore, as MinGW has the PATH variable in Windows format
 
+# On Windows, the OS environment variable contains "Windows_NT"
+UNAME_S := $(shell uname -s)
+ifeq ($(OS),Windows_NT)
+  ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
+    UNAME := MINGW
+  else ifeq ($(findstring MSYS,$(UNAME_S)),MSYS)
+    UNAME := MSYS
+  else ifeq ($(findstring CYGWIN,$(UNAME_S)),CYGWIN)
+    UNAME := CYGWIN
+  else
+    UNAME := WINDOWS
+  endif
+else
+  ifeq ($(UNAME_S),Linux)
+    UNAME := LINUX
+  else ifeq ($(UNAME_S),Darwin)
+    UNAME := DARWIN
+  else
+    UNAME := LINUX
+  endif
+endif
+
+# UNAME is now one of WINDOWS, LINUX, CYGWIN, MSYS, MINGW, DARWIN.
+# If the uname command fails, it is set to Unknown.
 
 # Display the detected OS
 $(info __ Detected OS/Kernel: $(UNAME))
+

@@ -3,15 +3,14 @@
 # use full paths
 SUBDIRS_$(d) := $(call ennermake_unwild_absolutize_filespec, $(SUBDIRS_$(d)))
 
-
 # Descend into subdirectories. Must use variable "dir" to descend.
 # Add the submodules' objects to current module's objects lists.
 $(foreach m,$(SUBDIRS_$(d)), \
-   $(eval dir := $m) \
-   $(eval include $(dir)/MakeRules.mk) \
-   $(eval SUBMODULES_$(d)  += $(MODULE_$(dir))) \
-   $(eval OBJECTS_$(d)     += $(OBJECTS_$(dir))) \
-   $(eval OBJECTS_PIC_$(d) += $(OBJECTS_PIC_$(dir))) \
+   $(eval ennermake_nextdir := $m) \
+   $(eval include $(ennermake_nextdir)/MakeRules.mk) \
+   $(eval SUBMODULES_$(d)  += $(MODULE_$(call ennermake_generate_safe_name,$(ennermake_nextdir)))) \
+   $(eval OBJECTS_$(d)     += $(OBJECTS_$(call ennermake_generate_safe_name,$(ennermake_nextdir)))) \
+   $(eval OBJECTS_PIC_$(d) += $(OBJECTS_PIC_$(call ennermake_generate_safe_name,$(ennermake_nextdir)))) \
    )
 
 # For debugging, insert the following after the foreach line

@@ -12,7 +12,6 @@ UNIT.LIBRARY_NAMES += $(UNIT.default.LIBRARY_NAMES)
 UNIT.REQUIRES      += $(UNIT.default.REQUIRES)
 UNIT.DEPENDS       += $(UNIT.default.DEPENDS)
 
-
 # Transform to absolute path names
 UNIT.SOURCES := $(call ennermake_unwild_absolutize_filespec,$(UNIT.SOURCES))
 UNIT.TARGET  := $(call ennermake_absolutize_filespec,$(UNIT.TARGET))
@@ -96,8 +95,8 @@ $(UNIT.COMPILETARGET):	$(UNIT.OBJECTS) $(UNIT.OBJECTS_PIC)
 	$(ECHO) Prerequisites: $^
 	$(ECHO) $@ compiled.
 
-$(call ennermake_debug, Target created in UNIT.OBJECTS    : "$(UNIT.OBJECTS)")
-$(call ennermake_debug, Target created in UNIT.OBJECTS_PIC: "$(UNIT.OBJECTS_PIC)")
+$(call ennermake_debug, Target created by UNIT.OBJECTS    : "$(UNIT.OBJECTS)")
+$(call ennermake_debug, Target created by UNIT.OBJECTS_PIC: "$(UNIT.OBJECTS_PIC)")
 
 # INTENT: all --- Target-specific variables
 ifneq ($(UNIT.TARGET),)
@@ -132,16 +131,16 @@ endif
 
 # INTENT: libdynamic
 ifeq ($(UNIT.INTENT),$(INTENT.libdynamic))
-   $(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
+$(UNIT.TARGET): $(UNIT.OBJECTS_PIC) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
 	$(ECHO) Linking dynamic library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.dynamic)
 	$(ECHO) $(unitname) ready.
 PROCESSED_INTENTS += libdynamic
 endif
 
-# INTENT: libstatic    # DEBUG: todo / check
+# INTENT: libstatic  # DEBUG: todo / check
 ifeq ($(UNIT.INTENT),$(INTENT.libstatic))
-   $(UNIT.TARGET): $(UNIT.OBJECTS) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
+$(UNIT.TARGET): $(UNIT.OBJECTS) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
 	$(ECHO) Linking static library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.static)
 	$(ECHO) $(unitname) ready.
@@ -150,7 +149,7 @@ endif
 
 # INTENT: Archive  # DEBUG: todo / check
 ifeq ($(UNIT.INTENT),$(INTENT.archive))
-   $(UNIT.TARGET): $(UNIT.OBJECTS) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
+$(UNIT.TARGET): $(UNIT.OBJECTS) $(UNIT.DEPENDS) | $(UNIT.REQUIRES)
 	$(ECHO) Archiving in library $@ --- in unit $(unitname) with intent $(unitintent)
 	$(LINK.archive)
 	$(ECHO) $(unitname) ready.
